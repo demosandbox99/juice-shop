@@ -82,7 +82,7 @@ export class OrderHistoryComponent implements OnInit {
           })
         }
       },
-      error: (err) => { console.log(err) }
+      error: (err) => { logger.log(err) }
     })
   }
 
@@ -105,7 +105,7 @@ export class OrderHistoryComponent implements OnInit {
           }
         })
       },
-      error: (err) => { console.log(err) }
+      error: (err) => { logger.log(err) }
     })
   }
 

@@ -33,7 +33,7 @@ export class UserDetailsComponent implements OnInit {
       next: (user) => {
         this.user = user
       },
-      error: (err) => { console.log(err) }
+      error: (err) => { logger.log(err) }
     })
   }
 }

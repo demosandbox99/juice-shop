@@ -60,7 +60,7 @@ export class ContactComponent implements OnInit {
       },
       error: (err) => {
         this.feedback = undefined
-        console.log(err)
+        logger.log(err)
       }
     })
     this.getNewCaptcha()
@@ -111,7 +111,7 @@ export class ContactComponent implements OnInit {
         this.resetForm()
       },
       error: (err) => {
-        console.log(err)
+        logger.log(err)
         this.snackBarHelperService.open(err.error, 'errorBar')
         this.feedback = {}
         this.resetCaptcha()

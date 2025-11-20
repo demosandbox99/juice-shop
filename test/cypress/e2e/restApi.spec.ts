@@ -27,7 +27,7 @@ describe('/api', () => {
               }
             )
             if (response.status === 200) {
-              console.log('Success')
+              logger.log('Success')
             }
           })
 
@@ -99,7 +99,7 @@ describe('/rest/saveLoginIp', () => {
               }
             )
             if (response.status === 200) {
-              console.log('Success')
+              logger.log('Success')
             }
           })
           cy.expectChallengeSolved({ challenge: 'HTTP-Header XSS' }) // TODO Add missing check for alert presence
@@ -111,7 +111,7 @@ describe('/rest/saveLoginIp', () => {
   it('should not be possible to save log-in IP when not logged in', () => {
     cy.request({ url: '/rest/saveLoginIp', failOnStatusCode: false }).then(
       (response) => {
-        console.log(response.body)
+        logger.log(response.body)
         expect(response.body).to.equal('Unauthorized')
       }
     )

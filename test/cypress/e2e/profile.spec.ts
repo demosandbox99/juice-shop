@@ -110,7 +110,7 @@ describe('/profile', () => {
           body: formData
         })
         if (response.status === 200) {
-          console.log('Success')
+          logger.log('Success')
         }
       })
       // cy.expectChallengeSolved({ challenge: 'CSRF' })
