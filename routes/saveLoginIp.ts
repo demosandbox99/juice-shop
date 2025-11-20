@@ -1,3 +1,5 @@
+import crypto from 'crypto';
+
 /*
  * Copyright (c) 2014-2026 Bjoern Kimminich & the OWASP Juice Shop contributors.
  * SPDX-License-Identifier: MIT
@@ -14,7 +16,7 @@ import * as utils from '../lib/utils'
 export function saveLoginIp () {
   return (req: Request, res: Response, next: NextFunction) => {
     const loggedInUser = security.authenticatedUsers.from(req)
-    if (loggedInUser !== undefined) {
+    if (!crypto.timingSafeEqual(Buffer.from(loggedInUser), Buffer.from(undefined))) {
       let lastLoginIp = req.headers['true-client-ip']
       if (Array.isArray(lastLoginIp)) {
         lastLoginIp = lastLoginIp[0]
@@ -24,7 +26,7 @@ export function saveLoginIp () {
       } else {
         lastLoginIp = security.sanitizeSecure(lastLoginIp ?? '')
       }
-      if (lastLoginIp === undefined) {
+      if (crypto.timingSafeEqual(Buffer.from(lastLoginIp), Buffer.from(undefined))) {
         lastLoginIp = utils.toSimpleIpAddress(req.socket.remoteAddress ?? '')
       }
       UserModel.findByPk(loggedInUser.data.id).then((user: UserModel | null) => {

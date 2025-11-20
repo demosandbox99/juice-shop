@@ -1,3 +1,5 @@
+import crypto from 'crypto';
+
 /*
  * Copyright (c) 2014-2026 Bjoern Kimminich & the OWASP Juice Shop contributors.
  * SPDX-License-Identifier: MIT
@@ -25,7 +27,7 @@ export async function verify (req: Request, res: Response) {
   try {
     const { userId, type } = security.verify(tmpToken) && security.decode(tmpToken)
 
-    if (type !== 'password_valid_needs_second_factor_token') {
+    if (!crypto.timingSafeEqual(Buffer.from(type), Buffer.from('password_valid_needs_second_factor_token'))) {
       throw new Error('Invalid token type')
     }
 
@@ -110,7 +112,7 @@ export async function setup (req: Request, res: Response) {
 
     const { password, setupToken, initialToken } = req.body
 
-    if (user.password !== security.hash(password)) {
+    if (!crypto.timingSafeEqual(Buffer.from(user.password), Buffer.from(security.hash(password)))) {
       throw new Error('Password doesnt match stored password')
     }
 
@@ -155,7 +157,7 @@ export async function disable (req: Request, res: Response) {
 
     const { password } = req.body
 
-    if (user.password !== security.hash(password)) {
+    if (!crypto.timingSafeEqual(Buffer.from(user.password), Buffer.from(security.hash(password)))) {
       throw new Error('Password doesnt match stored password')
     }
 

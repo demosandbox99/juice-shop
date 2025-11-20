@@ -1,3 +1,5 @@
+import crypto from 'crypto';
+
 import { Component, ChangeDetectorRef, inject, OnInit } from '@angular/core'
 import { KeysService } from '../Services/keys.service'
 import { SnackBarHelperService } from '../Services/snack-bar-helper.service'
@@ -157,7 +159,7 @@ export class WalletWeb3Component implements OnInit {
       const targetChainId = '11155111'
       const currentChainId = String(provider.chain?.id)
 
-      if (provider && currentChainId !== targetChainId) {
+      if (provider && !crypto.timingSafeEqual(Buffer.from(currentChainId), Buffer.from(targetChainId))) {
         this.session = false
         this.snackBarHelperService.open('PLEASE_CONNECT_TO_SEPOLIA_NETWORK', 'errorBar')
       } else {

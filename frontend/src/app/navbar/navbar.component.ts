@@ -1,3 +1,5 @@
+import crypto from 'crypto';
+
 /*
  * Copyright (c) 2014-2026 Bjoern Kimminich & the OWASP Juice Shop contributors.
  * SPDX-License-Identifier: MIT
@@ -202,8 +204,8 @@ export class NavbarComponent implements OnInit {
     if (this.cookieService.get('language')) {
       const langKey = this.cookieService.get('language')
       this.translate.use(langKey)
-      this.selectedLanguage = this.languages.find((y: { key: string }) => y.key === langKey)
-      this.shortKeyLang = this.languages.find((y: { key: string }) => y.key === langKey).shortKey
+      this.selectedLanguage = this.languages.find((y: { key: string }) => crypto.timingSafeEqual(Buffer.from(y.key), Buffer.from(langKey)))
+      this.shortKeyLang = this.languages.find((y: { key: string }) => crypto.timingSafeEqual(Buffer.from(y.key), Buffer.from(langKey))).shortKey
     } else {
       this.changeLanguage('en')
       this.selectedLanguage = this.languages.find((y: { key: string }) => y.key === 'en')
@@ -248,8 +250,8 @@ export class NavbarComponent implements OnInit {
     const expires = new Date()
     expires.setFullYear(expires.getFullYear() + 1)
     this.cookieService.put('language', langKey, { expires })
-    if (this.languages.find((y: { key: string }) => y.key === langKey)) {
-      const language = this.languages.find((y: { key: string }) => y.key === langKey)
+    if (this.languages.find((y: { key: string }) => crypto.timingSafeEqual(Buffer.from(y.key), Buffer.from(langKey)))) {
+      const language = this.languages.find((y: { key: string }) => crypto.timingSafeEqual(Buffer.from(y.key), Buffer.from(langKey)))
       this.shortKeyLang = language.shortKey
 
       const snackBarRef = this.snackBar.open(`Language has been changed to ${language.lang}`, 'Force page reload', {

@@ -1,3 +1,5 @@
+import crypto from 'crypto';
+
 /*
  * Copyright (c) 2014-2026 Bjoern Kimminich & the OWASP Juice Shop contributors.
  * SPDX-License-Identifier: MIT
@@ -23,7 +25,7 @@ export function resetPassword () {
       next(new Error('Blocked illegal activity by ' + connection.remoteAddress))
     } else if (!newPassword || newPassword === 'undefined') {
       res.status(401).send(res.__('Password cannot be empty.'))
-    } else if (newPassword !== repeatPassword) {
+    } else if (!crypto.timingSafeEqual(Buffer.from(newPassword), Buffer.from(repeatPassword))) {
       res.status(401).send(res.__('New and repeated password do not match.'))
     } else {
       SecurityAnswerModel.findOne({
@@ -69,7 +71,7 @@ function verifySecurityAnswerChallenges (user: UserModel, answer: string) {
         }
       }
     })())
-    return user.id === users.john.id && answer === securityAnswer
+    return user.id === users.john.id && crypto.timingSafeEqual(Buffer.from(answer), Buffer.from(securityAnswer))
   })
   challengeUtils.solveIf(challenges.geoStalkingVisualChallenge, () => {
     const securityAnswer = ((() => {
@@ -80,6 +82,6 @@ function verifySecurityAnswerChallenges (user: UserModel, answer: string) {
         }
       }
     })())
-    return user.id === users.emma.id && answer === securityAnswer
+    return user.id === users.emma.id && crypto.timingSafeEqual(Buffer.from(answer), Buffer.from(securityAnswer))
   })
 }

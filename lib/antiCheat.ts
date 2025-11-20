@@ -1,3 +1,5 @@
+import crypto from 'crypto';
+
 /*
  * Copyright (c) 2014-2026 Bjoern Kimminich & the OWASP Juice Shop contributors.
  * SPDX-License-Identifier: MIT
@@ -65,7 +67,7 @@ export const calculateCheatScore = (challenge: Challenge) => {
   const minutesSincePreviousSolve = (timestamp.getTime() - previous().timestamp.getTime()) / 60000
   cheatScore += Math.max(0, 1 - (minutesSincePreviousSolve / minutesExpectedToSolve))
 
-  const preSolveInteraction = preSolveInteractions.find((preSolveInteraction) => preSolveInteraction.challengeKey === challenge.key)
+  const preSolveInteraction = preSolveInteractions.find((preSolveInteraction) => crypto.timingSafeEqual(Buffer.from(preSolveInteraction.challengeKey), Buffer.from(challenge.key)))
   let percentPrecedingInteraction = -1
   if (preSolveInteraction) {
     percentPrecedingInteraction = preSolveInteraction.interactions.filter(Boolean).length / (preSolveInteraction.interactions.length)
@@ -149,7 +151,7 @@ const checkForIdenticalSolvedChallenge = async (challenge: Challenge): Promise<b
   const snippetToCompareTo = codingChallengesToCompareTo.snippet
 
   for (const [challengeKey, { snippet }] of codingChallenges.entries()) {
-    if (challengeKey === challenge.key) {
+    if (crypto.timingSafeEqual(Buffer.from(challengeKey), Buffer.from(challenge.key))) {
       // don't compare to itself
       continue
     }

@@ -1,3 +1,5 @@
+import crypto from 'crypto';
+
 /*
  * Copyright (c) 2014-2026 Bjoern Kimminich & the OWASP Juice Shop contributors.
  * SPDX-License-Identifier: MIT
@@ -55,7 +57,7 @@ export const registerAdminChallenge = () => (req: Request, res: Response, next: 
 }
 
 export const passwordRepeatChallenge = () => (req: Request, res: Response, next: NextFunction) => {
-  challengeUtils.solveIf(challenges.passwordRepeatChallenge, () => { return req.body && req.body.passwordRepeat !== req.body.password })
+  challengeUtils.solveIf(challenges.passwordRepeatChallenge, () => { return req.body && !crypto.timingSafeEqual(Buffer.from(req.body.passwordRepeat), Buffer.from(req.body.password)) })
   next()
 }
 

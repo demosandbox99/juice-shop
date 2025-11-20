@@ -1,3 +1,5 @@
+import crypto from 'crypto';
+
 /*
  * Copyright (c) 2014-2026 Bjoern Kimminich & the OWASP Juice Shop contributors.
  * SPDX-License-Identifier: MIT
@@ -109,7 +111,7 @@ function matchValidator (passwordControl: AbstractControl) {
   return function matchOtherValidate (repeatPasswordControl: UntypedFormControl) {
     const password = passwordControl.value
     const passwordRepeat = repeatPasswordControl.value
-    if (password !== passwordRepeat) {
+    if (!crypto.timingSafeEqual(Buffer.from(password), Buffer.from(passwordRepeat))) {
       return { notSame: true }
     }
     return null

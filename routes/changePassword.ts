@@ -1,3 +1,5 @@
+import crypto from 'crypto';
+
 /*
  * Copyright (c) 2014-2026 Bjoern Kimminich & the OWASP Juice Shop contributors.
  * SPDX-License-Identifier: MIT
@@ -19,7 +21,7 @@ export function changePassword () {
     if (!newPassword || newPassword === 'undefined') {
       res.status(401).send(res.__('Password cannot be empty.'))
       return
-    } else if (newPassword !== repeatPassword) {
+    } else if (!crypto.timingSafeEqual(Buffer.from(newPassword), Buffer.from(repeatPassword))) {
       res.status(401).send(res.__('New and repeated password do not match.'))
       return
     }
@@ -36,7 +38,7 @@ export function changePassword () {
       return
     }
 
-    if (currentPassword && security.hash(currentPassword) !== loggedInUser.data.password) {
+    if (currentPassword && !crypto.timingSafeEqual(Buffer.from(security.hash(currentPassword)), Buffer.from(loggedInUser.data.password))) {
       res.status(401).send(res.__('Current password is not correct.'))
       return
     }
@@ -51,7 +53,7 @@ export function changePassword () {
       await user.update({ password: newPasswordInString })
       challengeUtils.solveIf(
         challenges.changePasswordBenderChallenge,
-        () => user.id === 3 && !currentPassword && user.password === security.hash('slurmCl4ssic')
+        () => user.id === 3 && !currentPassword && crypto.timingSafeEqual(Buffer.from(user.password), Buffer.from(security.hash('slurmCl4ssic')))
       )
       res.json({ user })
     } catch (error) {

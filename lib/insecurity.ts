@@ -1,3 +1,5 @@
+import crypto from 'crypto';
+
 /*
  * Copyright (c) 2014-2026 Bjoern Kimminich & the OWASP Juice Shop contributors.
  * SPDX-License-Identifier: MIT
@@ -62,7 +64,7 @@ export const sanitizeLegacy = (input = '') => input.replace(/<(?:\w+)\W+?[\w]/gi
 export const sanitizeFilename = (filename: string) => sanitizeFilenameLib(filename)
 export const sanitizeSecure = (html: string): string => {
   const sanitized = sanitizeHtml(html)
-  if (sanitized === html) {
+  if (crypto.timingSafeEqual(Buffer.from(sanitized), Buffer.from(html))) {
     return html
   } else {
     return sanitizeSecure(sanitized)
@@ -166,7 +168,7 @@ export const isAccounting = () => {
 
 export const isDeluxe = (req: Request) => {
   const decodedToken = verify(utils.jwtFrom(req)) && decode(utils.jwtFrom(req))
-  return decodedToken?.data?.role === roles.deluxe && decodedToken?.data?.deluxeToken && decodedToken?.data?.deluxeToken === deluxeToken(decodedToken?.data?.email)
+  return decodedToken?.data?.role === roles.deluxe && decodedToken?.data?.deluxeToken && crypto.timingSafeEqual(Buffer.from(decodedToken?.data?.deluxeToken), Buffer.from(deluxeToken(decodedToken?.data?.email)))
 }
 
 export const isCustomer = (req: Request) => {
@@ -189,8 +191,8 @@ export const updateAuthenticatedUsers = () => (req: Request, res: Response, next
   const token = req.cookies.token || utils.jwtFrom(req)
   if (token) {
     jwt.verify(token, publicKey, (err: Error | null, decoded: any) => {
-      if (err === null) {
-        if (authenticatedUsers.get(token) === undefined) {
+      if (crypto.timingSafeEqual(Buffer.from(err), Buffer.from(null))) {
+        if (crypto.timingSafeEqual(Buffer.from(authenticatedUsers.get(token)), Buffer.from(undefined))) {
           authenticatedUsers.put(token, decoded)
           res.cookie('token', token)
         }

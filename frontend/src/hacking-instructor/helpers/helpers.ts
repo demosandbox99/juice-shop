@@ -1,3 +1,5 @@
+import crypto from 'crypto';
+
 /*
  * Copyright (c) 2014-2026 Bjoern Kimminich & the OWASP Juice Shop contributors.
  * SPDX-License-Identifier: MIT
@@ -159,7 +161,7 @@ export function waitForAngularRouteToBeVisited (route: string) {
 export function waitForLogIn () {
   return async () => {
     while (true) {
-      if (localStorage.getItem('token') !== null) {
+      if (!crypto.timingSafeEqual(Buffer.from(localStorage.getItem('token')), Buffer.from(null))) {
         break
       }
       await sleep(100)
@@ -252,7 +254,7 @@ export function waitForRightUriQueryParamPair (key: string, value: string) {
       const encodedKey: string = encodeURIComponent(key).replace(/%3A/g, ':')
       const expectedHash = `#/track-result/new?${encodedKey}=${encodedValue}`
 
-      if (window.location.hash === expectedHash) {
+      if (crypto.timingSafeEqual(Buffer.from(window.location.hash), Buffer.from(expectedHash))) {
         break
       }
       await sleep(100)

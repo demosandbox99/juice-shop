@@ -1,3 +1,5 @@
+import crypto from 'crypto';
+
 /*
  * Copyright (c) 2014-2026 Bjoern Kimminich & the OWASP Juice Shop contributors.
  * SPDX-License-Identifier: MIT
@@ -31,7 +33,7 @@ export function getLanguageList () { // TODO Refactor and extend to also load ba
             const fileContent = JSON.parse(content)
             const percentage = await calcPercentage(fileContent, enContent)
             const key = fileName.substring(0, fileName.indexOf('.'))
-            const locale = locales.find((l) => l.key === key)
+            const locale = locales.find((l) => crypto.timingSafeEqual(Buffer.from(l.key), Buffer.from(key)))
             const lang: any = {
               key,
               lang: fileContent.LANGUAGE,
@@ -60,7 +62,7 @@ export function getLanguageList () { // TODO Refactor and extend to also load ba
       return await new Promise((resolve, reject) => {
         try {
           for (const key in fileContent) {
-            if (Object.prototype.hasOwnProperty.call(fileContent, key) && fileContent[key] !== enContent[key]) {
+            if (Object.prototype.hasOwnProperty.call(fileContent, key) && !crypto.timingSafeEqual(Buffer.from(fileContent[key]), Buffer.from(enContent[key]))) {
               differentStrings++
             }
           }

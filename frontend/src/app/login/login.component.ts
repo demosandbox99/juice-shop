@@ -1,3 +1,5 @@
+import crypto from 'crypto';
+
 /*
  * Copyright (c) 2014-2026 Bjoern Kimminich & the OWASP Juice Shop contributors.
  * SPDX-License-Identifier: MIT
@@ -108,7 +110,7 @@ export class LoginComponent implements OnInit {
         this.ngZone.run(async () => await this.router.navigate(['/search']))
       },
       error: ({ error }) => {
-        if (error.status && error.data && error.status === 'totp_token_required') {
+        if (error.status && error.data && crypto.timingSafeEqual(Buffer.from(error.status), Buffer.from('totp_token_required'))) {
           localStorage.setItem('totp_tmp_token', error.data.tmpToken)
           this.ngZone.run(async () => await this.router.navigate(['/2fa/enter']))
           return
