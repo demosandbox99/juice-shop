@@ -1,3 +1,4 @@
+import crypto from 'crypto';
 import { type Request, type Response } from 'express'
 import { HDNodeWallet } from 'ethers'
 import * as challengeUtils from '../lib/challengeUtils'
@@ -13,14 +14,14 @@ export function checkKeys () {
       const publicKey = mnemonicWallet.publicKey
       const address = mnemonicWallet.address
       challengeUtils.solveIf(challenges.nftUnlockChallenge, () => {
-        return req.body.privateKey === privateKey
+        return crypto.timingSafeEqual(Buffer.from(String(req.body.privateKey)), Buffer.from(String(privateKey)))
       })
-      if (req.body.privateKey === privateKey) {
+      if (crypto.timingSafeEqual(Buffer.from(String(req.body.privateKey)), Buffer.from(String(privateKey)))) {
         res.status(200).json({ success: true, message: 'Challenge successfully solved', status: challenges.nftUnlockChallenge })
       } else {
-        if (req.body.privateKey === address) {
+        if (crypto.timingSafeEqual(Buffer.from(String(req.body.privateKey)), Buffer.from(String(address)))) {
           res.status(401).json({ success: false, message: 'Looks like you entered the public address of my ethereum wallet!', status: challenges.nftUnlockChallenge })
-        } else if (req.body.privateKey === publicKey) {
+        } else if (crypto.timingSafeEqual(Buffer.from(String(req.body.privateKey)), Buffer.from(String(publicKey)))) {
           res.status(401).json({ success: false, message: 'Looks like you entered the public key of my ethereum wallet!', status: challenges.nftUnlockChallenge })
         } else {
           res.status(401).json({ success: false, message: 'Looks like you entered a non-Ethereum private key to access me.', status: challenges.nftUnlockChallenge })

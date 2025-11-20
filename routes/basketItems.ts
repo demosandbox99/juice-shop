@@ -3,6 +3,7 @@
  * SPDX-License-Identifier: MIT
  */
 
+import crypto from 'crypto';
 import { type Request, type Response, type NextFunction } from 'express'
 import { BasketItemModel } from '../models/basketitem'
 import { QuantityModel } from '../models/quantity'
@@ -24,11 +25,11 @@ export function addBasketItem () {
     const quantities = []
 
     for (let i = 0; i < result.length; i++) {
-      if (result[i].key === 'ProductId') {
+      if (crypto.timingSafeEqual(Buffer.from(String(result[i].key)), Buffer.from(String('ProductId')))) {
         productIds.push(result[i].value)
-      } else if (result[i].key === 'BasketId') {
+      } else if (crypto.timingSafeEqual(Buffer.from(String(result[i].key)), Buffer.from(String('BasketId')))) {
         basketIds.push(result[i].value)
-      } else if (result[i].key === 'quantity') {
+      } else if (crypto.timingSafeEqual(Buffer.from(String(result[i].key)), Buffer.from(String('quantity')))) {
         quantities.push(result[i].value)
       }
     }

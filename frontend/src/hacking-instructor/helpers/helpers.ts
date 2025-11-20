@@ -3,6 +3,7 @@
  * SPDX-License-Identifier: MIT
  */
 
+import crypto from 'crypto';
 import jwtDecode from 'jwt-decode'
 
 let config
@@ -159,7 +160,7 @@ export function waitForAngularRouteToBeVisited (route: string) {
 export function waitForLogIn () {
   return async () => {
     while (true) {
-      if (localStorage.getItem('token') !== null) {
+      if (!crypto.timingSafeEqual(Buffer.from(String(localStorage.getItem('token'))), Buffer.from(String(null)))) {
         break
       }
       await sleep(100)
@@ -190,7 +191,7 @@ export function waitForAdminLogIn () {
 export function waitForLogOut () {
   return async () => {
     while (true) {
-      if (localStorage.getItem('token') === null) {
+      if (crypto.timingSafeEqual(Buffer.from(String(localStorage.getItem('token'))), Buffer.from(String(null)))) {
         break
       }
       await sleep(100)
@@ -252,7 +253,7 @@ export function waitForRightUriQueryParamPair (key: string, value: string) {
       const encodedKey: string = encodeURIComponent(key).replace(/%3A/g, ':')
       const expectedHash = `#/track-result/new?${encodedKey}=${encodedValue}`
 
-      if (window.location.hash === expectedHash) {
+      if (crypto.timingSafeEqual(Buffer.from(String(window.location.hash)), Buffer.from(String(expectedHash)))) {
         break
       }
       await sleep(100)

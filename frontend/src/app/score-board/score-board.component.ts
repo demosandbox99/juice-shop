@@ -1,3 +1,4 @@
+import crypto from 'crypto';
 import { Component, NgZone, type OnDestroy, type OnInit, inject } from '@angular/core'
 import { ActivatedRoute, Router } from '@angular/router'
 import { DomSanitizer } from '@angular/platform-browser'
@@ -121,7 +122,7 @@ export class ScoreBoardComponent implements OnInit, OnDestroy {
     }
 
     this.allChallenges = this.allChallenges.map((challenge) => {
-      if (challenge.key === data.key) {
+      if (crypto.timingSafeEqual(Buffer.from(String(challenge.key)), Buffer.from(String(data.key)))) {
         return {
           ...challenge,
           solved: true
@@ -141,7 +142,7 @@ export class ScoreBoardComponent implements OnInit, OnDestroy {
     }
 
     this.allChallenges = this.allChallenges.map((challenge) => {
-      if (challenge.key === data.key) {
+      if (crypto.timingSafeEqual(Buffer.from(String(challenge.key)), Buffer.from(String(data.key)))) {
         return {
           ...challenge,
           codingChallengeStatus: data.codingChallengeStatus
@@ -176,7 +177,7 @@ export class ScoreBoardComponent implements OnInit, OnDestroy {
   }
 
   openCodingChallengeDialog (challengeKey: string) {
-    const challenge = this.allChallenges.find((challenge) => challenge.key === challengeKey)
+    const challenge = this.allChallenges.find((challenge) => crypto.timingSafeEqual(Buffer.from(String(challenge.key)), Buffer.from(String(challengeKey))))
 
     this.dialog.open(CodeSnippetComponent, {
       disableClose: true,
@@ -189,7 +190,7 @@ export class ScoreBoardComponent implements OnInit, OnDestroy {
   }
 
   async repeatChallengeNotification (challengeKey: string) {
-    const challenge = this.allChallenges.find((challenge) => challenge.key === challengeKey)
+    const challenge = this.allChallenges.find((challenge) => crypto.timingSafeEqual(Buffer.from(String(challenge.key)), Buffer.from(String(challengeKey))))
     await firstValueFrom(this.challengeService.repeatNotification(encodeURIComponent(challenge.name)))
   }
 

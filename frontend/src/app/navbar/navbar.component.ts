@@ -3,6 +3,7 @@
  * SPDX-License-Identifier: MIT
  */
 
+import crypto from 'crypto';
 import { Component, EventEmitter, NgZone, type OnInit, Output, inject } from '@angular/core'
 import { environment } from '../../environments/environment'
 import { ChallengeService } from '../Services/challenge.service'
@@ -164,7 +165,7 @@ export class NavbarComponent implements OnInit {
 
     this.ngZone.runOutsideAngular(() => {
       this.io.socket().on('challenge solved', (challenge) => {
-        if (challenge.key === 'scoreBoardChallenge') {
+        if (crypto.timingSafeEqual(Buffer.from(String(challenge.key)), Buffer.from(String('scoreBoardChallenge')))) {
           this.scoreBoardVisible = true
         }
       })
@@ -202,12 +203,12 @@ export class NavbarComponent implements OnInit {
     if (this.cookieService.get('language')) {
       const langKey = this.cookieService.get('language')
       this.translate.use(langKey)
-      this.selectedLanguage = this.languages.find((y: { key: string }) => y.key === langKey)
-      this.shortKeyLang = this.languages.find((y: { key: string }) => y.key === langKey).shortKey
+      this.selectedLanguage = this.languages.find((y: { key: string }) => crypto.timingSafeEqual(Buffer.from(String(y.key)), Buffer.from(String(langKey))))
+      this.shortKeyLang = this.languages.find((y: { key: string }) => crypto.timingSafeEqual(Buffer.from(String(y.key)), Buffer.from(String(langKey)))).shortKey
     } else {
       this.changeLanguage('en')
-      this.selectedLanguage = this.languages.find((y: { key: string }) => y.key === 'en')
-      this.shortKeyLang = this.languages.find((y: { key: string }) => y.key === 'en').shortKey
+      this.selectedLanguage = this.languages.find((y: { key: string }) => crypto.timingSafeEqual(Buffer.from(String(y.key)), Buffer.from(String('en'))))
+      this.shortKeyLang = this.languages.find((y: { key: string }) => crypto.timingSafeEqual(Buffer.from(String(y.key)), Buffer.from(String('en')))).shortKey
     }
   }
 
@@ -248,8 +249,8 @@ export class NavbarComponent implements OnInit {
     const expires = new Date()
     expires.setFullYear(expires.getFullYear() + 1)
     this.cookieService.put('language', langKey, { expires })
-    if (this.languages.find((y: { key: string }) => y.key === langKey)) {
-      const language = this.languages.find((y: { key: string }) => y.key === langKey)
+    if (this.languages.find((y: { key: string }) => crypto.timingSafeEqual(Buffer.from(String(y.key)), Buffer.from(String(langKey))))) {
+      const language = this.languages.find((y: { key: string }) => crypto.timingSafeEqual(Buffer.from(String(y.key)), Buffer.from(String(langKey))))
       this.shortKeyLang = language.shortKey
 
       const snackBarRef = this.snackBar.open(`Language has been changed to ${language.lang}`, 'Force page reload', {

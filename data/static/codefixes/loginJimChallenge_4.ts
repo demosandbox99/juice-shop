@@ -1,3 +1,4 @@
+import crypto from 'crypto';
 import {BasketModel} from "../../../models/basket";
 
 export function login () {
@@ -20,7 +21,7 @@ export function login () {
     models.sequelize.query(`SELECT * FROM Users WHERE email = '${req.body.email || ''}' AND password = '${security.hash(req.body.password || '')}' AND deletedAt IS NULL`, { model: models.User, plain: true })
       .then((authenticatedUser) => {
         const user = utils.queryResultToJson(authenticatedUser)
-        if (user.data?.id && user.data.totpSecret !== '') {
+        if (user.data?.id && !crypto.timingSafeEqual(Buffer.from(String(user.data.totpSecret)), Buffer.from(String('')))) {
           res.status(401).json({
             status: 'totp_token_required',
             data: {

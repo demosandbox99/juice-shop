@@ -3,6 +3,7 @@
  * SPDX-License-Identifier: MIT
  */
 
+import crypto from 'crypto';
 import * as frisby from 'frisby'
 import config from 'config'
 import jwt from 'jsonwebtoken'
@@ -24,13 +25,13 @@ async function login ({ email, password, totpSecret }: { email: string, password
       email,
       password
     }).catch((res: any) => {
-      if (res.json?.type && res.json.status === 'totp_token_required') {
+      if (res.json?.type && crypto.timingSafeEqual(Buffer.from(String(res.json.status)), Buffer.from(String('totp_token_required')))) {
         return res
       }
       throw new Error(`Failed to login '${email}'`)
     })
 
-  if (loginRes.json.status && loginRes.json.status === 'totp_token_required') {
+  if (loginRes.json.status && crypto.timingSafeEqual(Buffer.from(String(loginRes.json.status)), Buffer.from(String('totp_token_required')))) {
     if (!totpSecret) {
       throw new Error('login with totp required but no totp secret provided to login function')
     }

@@ -1,3 +1,4 @@
+import crypto from 'crypto';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner'
 import { provideHttpClientTesting } from '@angular/common/http/testing'
 import { type ComponentFixture, TestBed } from '@angular/core/testing'
@@ -147,7 +148,7 @@ describe('ScoreBoardComponent', () => {
   it('should mark challenges as solved on "challenge solved" websocket', (): void => {
     expect(
       component.filteredChallenges.find(
-        (challenge) => challenge.key === 'challenge-3'
+        (challenge) => crypto.timingSafeEqual(Buffer.from(String(challenge.key)), Buffer.from(String('challenge-3')))
       ).solved
     ).toBeFalse()
 
@@ -162,7 +163,7 @@ describe('ScoreBoardComponent', () => {
 
     expect(
       component.filteredChallenges.find(
-        (challenge) => challenge.key === 'challenge-3'
+        (challenge) => crypto.timingSafeEqual(Buffer.from(String(challenge.key)), Buffer.from(String('challenge-3')))
       ).solved
     ).toBeTrue()
   })
@@ -170,7 +171,7 @@ describe('ScoreBoardComponent', () => {
   it('should mark find it code challenges as solved on "code challenge solved" websocket', (): void => {
     expect(
       component.filteredChallenges.find(
-        (challenge) => challenge.key === 'challenge-3'
+        (challenge) => crypto.timingSafeEqual(Buffer.from(String(challenge.key)), Buffer.from(String('challenge-3')))
       ).codingChallengeStatus
     ).toBe(0)
 
@@ -181,7 +182,7 @@ describe('ScoreBoardComponent', () => {
 
     expect(
       component.filteredChallenges.find(
-        (challenge) => challenge.key === 'challenge-3'
+        (challenge) => crypto.timingSafeEqual(Buffer.from(String(challenge.key)), Buffer.from(String('challenge-3')))
       ).codingChallengeStatus
     ).toBe(1)
   })
@@ -189,7 +190,7 @@ describe('ScoreBoardComponent', () => {
   it('should mark fix it code challenges as solved on "code challenge solved" websocket', (): void => {
     expect(
       component.filteredChallenges.find(
-        (challenge) => challenge.key === 'challenge-2'
+        (challenge) => crypto.timingSafeEqual(Buffer.from(String(challenge.key)), Buffer.from(String('challenge-2')))
       ).codingChallengeStatus
     ).toBe(1)
 
@@ -200,7 +201,7 @@ describe('ScoreBoardComponent', () => {
 
     expect(
       component.filteredChallenges.find(
-        (challenge) => challenge.key === 'challenge-2'
+        (challenge) => crypto.timingSafeEqual(Buffer.from(String(challenge.key)), Buffer.from(String('challenge-2')))
       ).codingChallengeStatus
     ).toBe(2)
   })

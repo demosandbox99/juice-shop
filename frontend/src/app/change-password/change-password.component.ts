@@ -3,6 +3,7 @@
  * SPDX-License-Identifier: MIT
  */
 
+import crypto from 'crypto';
 import {
   type AbstractControl,
   UntypedFormControl,
@@ -147,7 +148,7 @@ function matchValidator (newPasswordControl: AbstractControl) {
   ) {
     const password = newPasswordControl.value
     const passwordRepeat = repeatNewPasswordControl.value
-    if (password !== passwordRepeat) {
+    if (!crypto.timingSafeEqual(Buffer.from(String(password)), Buffer.from(String(passwordRepeat)))) {
       return { notSame: true }
     }
     return null

@@ -3,6 +3,7 @@
  * SPDX-License-Identifier: MIT
  */
 
+import crypto from 'crypto';
 import { type Request, type Response, type NextFunction } from 'express'
 
 import * as challengeUtils from '../lib/challengeUtils'
@@ -97,7 +98,7 @@ export function dataExport () {
           }
           const emailHash = security.hash(email).slice(0, 4)
           for (const order of userData.orders) {
-            challengeUtils.solveIf(challenges.dataExportChallenge, () => { return order.orderId.split('-')[0] !== emailHash })
+            challengeUtils.solveIf(challenges.dataExportChallenge, () => { return !crypto.timingSafeEqual(Buffer.from(String(order.orderId.split('-')[0])), Buffer.from(String(emailHash))) })
           }
           res.status(200).send({ userData: JSON.stringify(userData, null, 2), confirmation: 'Your data export will open in a new Browser window.' })
         },

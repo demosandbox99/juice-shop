@@ -3,6 +3,7 @@
  * SPDX-License-Identifier: MIT
  */
 
+import crypto from 'crypto';
 import { UserService } from '../Services/user.service'
 import { SecurityQuestionService } from '../Services/security-question.service'
 import { type AbstractControl, UntypedFormControl, Validators, FormsModule, ReactiveFormsModule } from '@angular/forms'
@@ -136,7 +137,7 @@ function matchValidator (passwordControl: AbstractControl) {
   return function matchOtherValidate (repeatPasswordControl: UntypedFormControl) {
     const password = passwordControl.value
     const passwordRepeat = repeatPasswordControl.value
-    if (password !== passwordRepeat) {
+    if (!crypto.timingSafeEqual(Buffer.from(String(password)), Buffer.from(String(passwordRepeat)))) {
       return { notSame: true }
     }
     return null
