@@ -3,6 +3,7 @@
  * SPDX-License-Identifier: MIT
  */
 
+import crypto from 'crypto';
 import { environment } from '../../environments/environment'
 import { ChallengeService } from '../Services/challenge.service'
 import { Component, EventEmitter, NgZone, type OnInit, Output, inject } from '@angular/core'
@@ -79,7 +80,7 @@ export class SidenavComponent implements OnInit {
     })
     this.ngZone.runOutsideAngular(() => {
       this.io.socket().on('challenge solved', (challenge) => {
-        if (challenge.key === 'scoreBoardChallenge') {
+        if (crypto.timingSafeEqual(Buffer.from(String(challenge.key)), Buffer.from(String('scoreBoardChallenge')))) {
           this.scoreBoardVisible = true
         }
       })

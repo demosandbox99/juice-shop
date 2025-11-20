@@ -3,6 +3,7 @@
  * SPDX-License-Identifier: MIT
  */
 
+import crypto from 'crypto';
 import { type Request, type Response } from 'express'
 
 import * as challengeUtils from '../lib/challengeUtils'
@@ -16,7 +17,7 @@ export function createProductReviews () {
     const user = security.authenticatedUsers.from(req)
     challengeUtils.solveIf(
       challenges.forgedReviewChallenge,
-      () => user?.data?.email !== req.body.author
+      () => !crypto.timingSafeEqual(Buffer.from(String(user?.data?.email)), Buffer.from(String(req.body.author)))
     )
 
     try {

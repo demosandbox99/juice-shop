@@ -3,6 +3,7 @@
  * SPDX-License-Identifier: MIT
  */
 
+import crypto from 'crypto';
 import config from 'config'
 import { type Request, type Response, type NextFunction } from 'express'
 
@@ -21,9 +22,9 @@ export function resetPassword () {
     const repeatPassword = body.repeat
     if (!email || !answer) {
       next(new Error('Blocked illegal activity by ' + connection.remoteAddress))
-    } else if (!newPassword || newPassword === 'undefined') {
+    } else if (!newPassword || crypto.timingSafeEqual(Buffer.from(String(newPassword)), Buffer.from(String('undefined')))) {
       res.status(401).send(res.__('Password cannot be empty.'))
-    } else if (newPassword !== repeatPassword) {
+    } else if (!crypto.timingSafeEqual(Buffer.from(String(newPassword)), Buffer.from(String(repeatPassword)))) {
       res.status(401).send(res.__('New and repeated password do not match.'))
     } else {
       SecurityAnswerModel.findOne({
@@ -32,7 +33,7 @@ export function resetPassword () {
           where: { email }
         }]
       }).then((data: SecurityAnswerModel | null) => {
-        if ((data != null) && security.hmac(answer) === data.answer) {
+        if ((data != null) && crypto.timingSafeEqual(Buffer.from(String(security.hmac(answer))), Buffer.from(String(data.answer)))) {
           UserModel.findByPk(data.UserId).then((user: UserModel | null) => {
             user?.update({ password: newPassword }).then((user: UserModel) => {
               verifySecurityAnswerChallenges(user, answer)

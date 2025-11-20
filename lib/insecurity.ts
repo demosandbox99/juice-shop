@@ -3,6 +3,7 @@
  * SPDX-License-Identifier: MIT
  */
 
+import crypto from 'crypto';
 import fs from 'node:fs'
 import crypto from 'node:crypto'
 import { type Request, type Response, type NextFunction } from 'express'
@@ -156,7 +157,7 @@ export const deluxeToken = (email: string) => {
 export const isAccounting = () => {
   return (req: Request, res: Response, next: NextFunction) => {
     const decodedToken = verify(utils.jwtFrom(req)) && decode(utils.jwtFrom(req))
-    if (decodedToken?.data?.role === roles.accounting) {
+    if (crypto.timingSafeEqual(Buffer.from(String(decodedToken?.data?.role)), Buffer.from(String(roles.accounting)))) {
       next()
     } else {
       res.status(403).json({ error: 'Malicious activity detected' })
@@ -166,12 +167,12 @@ export const isAccounting = () => {
 
 export const isDeluxe = (req: Request) => {
   const decodedToken = verify(utils.jwtFrom(req)) && decode(utils.jwtFrom(req))
-  return decodedToken?.data?.role === roles.deluxe && decodedToken?.data?.deluxeToken && decodedToken?.data?.deluxeToken === deluxeToken(decodedToken?.data?.email)
+  return crypto.timingSafeEqual(Buffer.from(String(decodedToken?.data?.role)), Buffer.from(String(roles.deluxe))) && decodedToken?.data?.deluxeToken && crypto.timingSafeEqual(Buffer.from(String(decodedToken?.data?.deluxeToken)), Buffer.from(String(deluxeToken(decodedToken?.data?.email))))
 }
 
 export const isCustomer = (req: Request) => {
   const decodedToken = verify(utils.jwtFrom(req)) && decode(utils.jwtFrom(req))
-  return decodedToken?.data?.role === roles.customer
+  return crypto.timingSafeEqual(Buffer.from(String(decodedToken?.data?.role)), Buffer.from(String(roles.customer)))
 }
 
 export const appendUserId = () => {
@@ -190,7 +191,7 @@ export const updateAuthenticatedUsers = () => (req: Request, res: Response, next
   if (token) {
     jwt.verify(token, publicKey, (err: Error | null, decoded: any) => {
       if (err === null) {
-        if (authenticatedUsers.get(token) === undefined) {
+        if (crypto.timingSafeEqual(Buffer.from(String(authenticatedUsers.get(token))), Buffer.from(String(undefined)))) {
           authenticatedUsers.put(token, decoded)
           res.cookie('token', token)
         }

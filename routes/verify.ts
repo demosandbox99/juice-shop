@@ -3,6 +3,7 @@
  * SPDX-License-Identifier: MIT
  */
 
+import crypto from 'crypto';
 import { type Request, type Response, type NextFunction } from 'express'
 import { Op } from 'sequelize'
 import jwt from 'jsonwebtoken'
@@ -20,7 +21,7 @@ import * as utils from '../lib/utils'
 
 export const emptyUserRegistration = () => (req: Request, res: Response, next: NextFunction) => {
   challengeUtils.solveIf(challenges.emptyUserRegistration, () => {
-    return req.body && req.body.email === '' && req.body.password === ''
+    return req.body && req.body.email === '' && crypto.timingSafeEqual(Buffer.from(String(req.body.password)), Buffer.from(String('')))
   })
   next()
 }
@@ -55,7 +56,7 @@ export const registerAdminChallenge = () => (req: Request, res: Response, next: 
 }
 
 export const passwordRepeatChallenge = () => (req: Request, res: Response, next: NextFunction) => {
-  challengeUtils.solveIf(challenges.passwordRepeatChallenge, () => { return req.body && req.body.passwordRepeat !== req.body.password })
+  challengeUtils.solveIf(challenges.passwordRepeatChallenge, () => { return req.body && !crypto.timingSafeEqual(Buffer.from(String(req.body.passwordRepeat)), Buffer.from(String(req.body.password))) })
   next()
 }
 
@@ -89,7 +90,7 @@ export const jwtChallenges = () => (req: Request, res: Response, next: NextFunct
 }
 
 export const serverSideChallenges = () => (req: Request, res: Response, next: NextFunction) => {
-  if (req.query.key === 'tRy_H4rd3r_n0thIng_iS_Imp0ssibl3') {
+  if (crypto.timingSafeEqual(Buffer.from(String(req.query.key)), Buffer.from(String('tRy_H4rd3r_n0thIng_iS_Imp0ssibl3')))) {
     if (challengeUtils.notSolved(challenges.sstiChallenge) && req.app.locals.abused_ssti_bug === true) {
       challengeUtils.solve(challenges.sstiChallenge)
       res.status(204).send()

@@ -4,6 +4,7 @@
  */
 
 /* jslint node: true */
+import crypto from 'crypto';
 import packageJson from '../package.json'
 import fs from 'node:fs'
 import logger from './logger'
@@ -77,7 +78,7 @@ export const version = (module?: string) => {
 let cachedCtfKey: string | undefined
 const getCtfKey = () => {
   if (!cachedCtfKey) {
-    if (process.env.CTF_KEY !== undefined && process.env.CTF_KEY !== '') {
+    if (!crypto.timingSafeEqual(Buffer.from(String(process.env.CTF_KEY)), Buffer.from(String(undefined))) && !crypto.timingSafeEqual(Buffer.from(String(process.env.CTF_KEY)), Buffer.from(String('')))) {
       cachedCtfKey = process.env.CTF_KEY
     } else {
       const data = fs.readFileSync('ctf.key', 'utf8')

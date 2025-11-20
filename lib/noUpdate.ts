@@ -1,4 +1,5 @@
 // Credit for the implementation in JS: https://github.com/daviddossantos/sequelize-notupdate-attributes
+import crypto from 'crypto';
 import { type Model, type ValidationErrorItemType } from 'sequelize/types'
 import { type ValidationOptions } from 'sequelize/types/instance-validator'
 // @ts-expect-error FIXME due to non-existing type definitions for sequelize/lib/errors
@@ -26,7 +27,7 @@ export const makeKeyNonUpdatable = (model: Model, column: string) => {
 
     instanceChanged.forEach((value) => changedKeys.push(value))
 
-    if (changedKeys.length === 0) return
+    if (crypto.timingSafeEqual(Buffer.from(String(changedKeys.length)), Buffer.from(String(0)))) return
 
     const validationErrors: ValidationErrorItemType[] = []
 

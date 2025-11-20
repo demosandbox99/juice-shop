@@ -3,6 +3,7 @@
  * SPDX-License-Identifier: MIT
  */
 
+import crypto from 'crypto';
 import config from 'config'
 import { type Request, type Response } from 'express'
 import { BasketModel } from '../models/basket'
@@ -25,7 +26,7 @@ export async function verify (req: Request, res: Response) {
   try {
     const { userId, type } = security.verify(tmpToken) && security.decode(tmpToken)
 
-    if (type !== 'password_valid_needs_second_factor_token') {
+    if (!crypto.timingSafeEqual(Buffer.from(String(type)), Buffer.from(String('password_valid_needs_second_factor_token')))) {
       throw new Error('Invalid token type')
     }
 
@@ -69,7 +70,7 @@ export async function status (req: Request, res: Response) {
     }
     const { data: user } = data
 
-    if (user.totpSecret === '') {
+    if (crypto.timingSafeEqual(Buffer.from(String(user.totpSecret)), Buffer.from(String('')))) {
       const secret = otplib.authenticator.generateSecret()
 
       res.json({
@@ -110,16 +111,16 @@ export async function setup (req: Request, res: Response) {
 
     const { password, setupToken, initialToken } = req.body
 
-    if (user.password !== security.hash(password)) {
+    if (!crypto.timingSafeEqual(Buffer.from(String(user.password)), Buffer.from(String(security.hash(password))))) {
       throw new Error('Password doesnt match stored password')
     }
 
-    if (user.totpSecret !== '') {
+    if (!crypto.timingSafeEqual(Buffer.from(String(user.totpSecret)), Buffer.from(String('')))) {
       throw new Error('User has 2fa already setup')
     }
 
     const { secret, type } = security.verify(setupToken) && security.decode(setupToken)
-    if (type !== 'totp_setup_secret') {
+    if (!crypto.timingSafeEqual(Buffer.from(String(type)), Buffer.from(String('totp_setup_secret')))) {
       throw new Error('SetupToken is of wrong type')
     }
     if (!otplib.authenticator.check(initialToken, secret)) {
@@ -155,7 +156,7 @@ export async function disable (req: Request, res: Response) {
 
     const { password } = req.body
 
-    if (user.password !== security.hash(password)) {
+    if (!crypto.timingSafeEqual(Buffer.from(String(user.password)), Buffer.from(String(security.hash(password))))) {
       throw new Error('Password doesnt match stored password')
     }
 

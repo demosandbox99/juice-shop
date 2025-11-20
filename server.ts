@@ -2,6 +2,7 @@
  * Copyright (c) 2014-2026 Bjoern Kimminich & the OWASP Juice Shop contributors.
  * SPDX-License-Identifier: MIT
  */
+import crypto from 'crypto';
 import i18n from 'i18n'
 import cors from 'cors'
 import fs from 'node:fs'
@@ -400,8 +401,8 @@ restoreOverwrittenFilesWithOriginals().then(() => {
   app.post('/api/Feedbacks', verify.captchaBypassChallenge())
   /* User registration challenge verifications before finale takes over */
   app.post('/api/Users', (req: Request, res: Response, next: NextFunction) => {
-    if (req.body.email !== undefined && req.body.password !== undefined && req.body.passwordRepeat !== undefined) {
-      if (req.body.email.length !== 0 && req.body.password.length !== 0) {
+    if (req.body.email !== undefined && !crypto.timingSafeEqual(Buffer.from(String(req.body.password)), Buffer.from(String(undefined))) && !crypto.timingSafeEqual(Buffer.from(String(req.body.passwordRepeat)), Buffer.from(String(undefined)))) {
+      if (req.body.email.length !== 0 && !crypto.timingSafeEqual(Buffer.from(String(req.body.password.length)), Buffer.from(String(0)))) {
         req.body.email = req.body.email.trim()
         req.body.password = req.body.password.trim()
         req.body.passwordRepeat = req.body.passwordRepeat.trim()

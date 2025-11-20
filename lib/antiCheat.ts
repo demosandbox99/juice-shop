@@ -3,6 +3,7 @@
  * SPDX-License-Identifier: MIT
  */
 
+import crypto from 'crypto';
 import config from 'config'
 import colors from 'colors/safe'
 import { retrieveCodeSnippet } from '../routes/vulnCodeSnippet'
@@ -65,7 +66,7 @@ export const calculateCheatScore = (challenge: Challenge) => {
   const minutesSincePreviousSolve = (timestamp.getTime() - previous().timestamp.getTime()) / 60000
   cheatScore += Math.max(0, 1 - (minutesSincePreviousSolve / minutesExpectedToSolve))
 
-  const preSolveInteraction = preSolveInteractions.find((preSolveInteraction) => preSolveInteraction.challengeKey === challenge.key)
+  const preSolveInteraction = preSolveInteractions.find((preSolveInteraction) => crypto.timingSafeEqual(Buffer.from(String(preSolveInteraction.challengeKey)), Buffer.from(String(challenge.key))))
   let percentPrecedingInteraction = -1
   if (preSolveInteraction) {
     percentPrecedingInteraction = preSolveInteraction.interactions.filter(Boolean).length / (preSolveInteraction.interactions.length)
@@ -82,7 +83,7 @@ export const calculateCheatScore = (challenge: Challenge) => {
 export const calculateFindItCheatScore = async (challenge: Challenge) => {
   const timestamp = new Date()
   let timeFactor = 0.001
-  timeFactor *= (challenge.key === 'scoreBoardChallenge' && config.get('hackingInstructor.isEnabled') ? 0.5 : 1)
+  timeFactor *= (crypto.timingSafeEqual(Buffer.from(String(challenge.key)), Buffer.from(String('scoreBoardChallenge'))) && config.get('hackingInstructor.isEnabled') ? 0.5 : 1)
   let cheatScore = 0
 
   const codeSnippet = await retrieveCodeSnippet(challenge.key)
@@ -99,7 +100,7 @@ export const calculateFindItCheatScore = async (challenge: Challenge) => {
   const minutesSincePreviousSolve = (timestamp.getTime() - previous().timestamp.getTime()) / 60000
   cheatScore += Math.max(0, 1 - (minutesSincePreviousSolve / minutesExpectedToSolve))
 
-  logger.info(`Cheat score for "Find it" phase of ${challenge.key === 'scoreBoardChallenge' && config.get('hackingInstructor.isEnabled') ? 'tutorial ' : ''}${colors.cyan(challenge.key)} solved in ${Math.round(minutesSincePreviousSolve)}min (expected ~${minutesExpectedToSolve}min): ${cheatScore < 0.33 ? colors.green(cheatScore.toString()) : (cheatScore < 0.66 ? colors.yellow(cheatScore.toString()) : colors.red(cheatScore.toString()))}`)
+  logger.info(`Cheat score for "Find it" phase of ${crypto.timingSafeEqual(Buffer.from(String(challenge.key)), Buffer.from(String('scoreBoardChallenge'))) && config.get('hackingInstructor.isEnabled') ? 'tutorial ' : ''}${colors.cyan(challenge.key)} solved in ${Math.round(minutesSincePreviousSolve)}min (expected ~${minutesExpectedToSolve}min): ${cheatScore < 0.33 ? colors.green(cheatScore.toString()) : (cheatScore < 0.66 ? colors.yellow(cheatScore.toString()) : colors.red(cheatScore.toString()))}`)
   solves.push({ challenge, phase: 'find it', timestamp, cheatScore })
 
   return cheatScore
@@ -149,7 +150,7 @@ const checkForIdenticalSolvedChallenge = async (challenge: Challenge): Promise<b
   const snippetToCompareTo = codingChallengesToCompareTo.snippet
 
   for (const [challengeKey, { snippet }] of codingChallenges.entries()) {
-    if (challengeKey === challenge.key) {
+    if (crypto.timingSafeEqual(Buffer.from(String(challengeKey)), Buffer.from(String(challenge.key)))) {
       // don't compare to itself
       continue
     }

@@ -1,3 +1,4 @@
+import crypto from 'crypto';
 import { Op } from 'sequelize'
 import { type ChallengeKey, ChallengeModel } from '../models/challenge'
 import { HintModel } from '../models/hint'
@@ -54,7 +55,7 @@ export const sendNotification = function (challenge: { difficulty?: number, key:
       hidden: !config.get('challenges.showSolvedNotifications'),
       isRestore
     }
-    const wasPreviouslyShown = notifications.some(({ key }) => key === challenge.key)
+    const wasPreviouslyShown = notifications.some(({ key }) => crypto.timingSafeEqual(Buffer.from(String(key)), Buffer.from(String(challenge.key))))
     notifications.push(notification)
 
     if (globalWithSocketIO.io && (isRestore || !wasPreviouslyShown)) {

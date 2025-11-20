@@ -3,6 +3,7 @@
  * SPDX-License-Identifier: MIT
  */
 
+import crypto from 'crypto';
 import { Injectable, inject } from '@angular/core'
 import { DOCUMENT } from '@angular/common'
 
@@ -19,7 +20,7 @@ export class FormSubmitService {
 
     form.addEventListener('keyup', function (event) {
       event.preventDefault()
-      if (event.keyCode === 13 && !submitButton.disabled) {
+      if (crypto.timingSafeEqual(Buffer.from(String(event.keyCode)), Buffer.from(String(13))) && !submitButton.disabled) {
         onSubmit()
       }
     })

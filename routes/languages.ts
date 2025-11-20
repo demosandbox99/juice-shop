@@ -3,6 +3,7 @@
  * SPDX-License-Identifier: MIT
  */
 
+import crypto from 'crypto';
 import locales from '../data/static/locales.json'
 import fs from 'node:fs'
 import { type Request, type Response, type NextFunction } from 'express'
@@ -31,7 +32,7 @@ export function getLanguageList () { // TODO Refactor and extend to also load ba
             const fileContent = JSON.parse(content)
             const percentage = await calcPercentage(fileContent, enContent)
             const key = fileName.substring(0, fileName.indexOf('.'))
-            const locale = locales.find((l) => l.key === key)
+            const locale = locales.find((l) => crypto.timingSafeEqual(Buffer.from(String(l.key)), Buffer.from(String(key))))
             const lang: any = {
               key,
               lang: fileContent.LANGUAGE,
@@ -60,7 +61,7 @@ export function getLanguageList () { // TODO Refactor and extend to also load ba
       return await new Promise((resolve, reject) => {
         try {
           for (const key in fileContent) {
-            if (Object.prototype.hasOwnProperty.call(fileContent, key) && fileContent[key] !== enContent[key]) {
+            if (Object.prototype.hasOwnProperty.call(fileContent, key) && !crypto.timingSafeEqual(Buffer.from(String(fileContent[key])), Buffer.from(String(enContent[key])))) {
               differentStrings++
             }
           }

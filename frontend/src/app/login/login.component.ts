@@ -3,6 +3,7 @@
  * SPDX-License-Identifier: MIT
  */
 
+import crypto from 'crypto';
 import { CookieService } from 'ngy-cookie'
 import { WindowRefService } from '../Services/window-ref.service'
 import { Router, RouterLink } from '@angular/router'
@@ -108,7 +109,7 @@ export class LoginComponent implements OnInit {
         this.ngZone.run(async () => await this.router.navigate(['/search']))
       },
       error: ({ error }) => {
-        if (error.status && error.data && error.status === 'totp_token_required') {
+        if (error.status && error.data && crypto.timingSafeEqual(Buffer.from(String(error.status)), Buffer.from(String('totp_token_required')))) {
           localStorage.setItem('totp_tmp_token', error.data.tmpToken)
           this.ngZone.run(async () => await this.router.navigate(['/2fa/enter']))
           return
