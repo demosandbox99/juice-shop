@@ -26,7 +26,7 @@ const months = ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN', 'JUL', 'AUG', 'SEP', '
 
 export const queryResultToJson = <T>(
   data: T,
-  status: string = 'success'
+  status = 'success'
 ): { data: T, status: string } => {
   return {
     status,

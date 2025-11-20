@@ -109,7 +109,7 @@ async function createChallenges () {
 }
 
 async function createHints (ChallengeId: number, hints: string[]) {
-  let i: number = 0
+  let i = 0
   return await Promise.all(
     hints.map(async (hint) => {
       hint = hint.replace(/OWASP Juice Shop/, `${config.get<string>('application.name')}`)

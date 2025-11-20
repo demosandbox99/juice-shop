@@ -23,7 +23,7 @@ export const readFixes = (key: string) => {
   }
   const files = fs.readdirSync(FixesDir)
   const fixes: string[] = []
-  let correct: number = -1
+  let correct = -1
   for (const file of files) {
     if (file.startsWith(`${key}_`)) {
       const fix = fs.readFileSync(`${FixesDir}/${file}`).toString()
