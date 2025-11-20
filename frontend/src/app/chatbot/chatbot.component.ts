@@ -82,7 +82,7 @@ export class ChatbotComponent implements OnInit, OnDestroy {
         this.profileImageSrc = user.profileImage
       },
       error: (err) => {
-        console.log(err)
+        logger.log(err)
       }
     })
   }

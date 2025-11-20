@@ -61,7 +61,7 @@ export class OAuthComponent implements OnInit {
   }
 
   invalidateSession (error: Error) {
-    console.log(error)
+    logger.log(error)
     this.cookieService.remove('token')
     localStorage.removeItem('token')
     sessionStorage.removeItem('bid')

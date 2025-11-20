@@ -177,7 +177,7 @@ export function waitForAdminLogIn () {
         const payload = decodedToken as any
         role = payload.data.role
       } catch {
-        console.log('Role from token could not be accessed.')
+        logger.log('Role from token could not be accessed.')
       }
       if (role === 'admin') {
         break

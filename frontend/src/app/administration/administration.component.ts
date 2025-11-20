@@ -65,7 +65,7 @@ export class AdministrationComponent implements OnInit {
       },
       error: (err) => {
         this.error = err
-        console.log(this.error)
+        logger.log(this.error)
       }
     })
   }
@@ -83,7 +83,7 @@ export class AdministrationComponent implements OnInit {
       },
       error: (err) => {
         this.error = err
-        console.log(this.error)
+        logger.log(this.error)
       }
     })
   }
@@ -95,7 +95,7 @@ export class AdministrationComponent implements OnInit {
       },
       error: (err) => {
         this.error = err
-        console.log(this.error)
+        logger.log(this.error)
       }
     })
   }

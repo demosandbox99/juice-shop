@@ -146,7 +146,7 @@ describe('/#/contact', () => {
         )
         if (response.status === 200) {
           const responseJson = await response.json()
-          console.log(responseJson)
+          logger.log(responseJson)
 
           await sendPostRequest(responseJson)
         }
@@ -172,7 +172,7 @@ describe('/#/contact', () => {
             }
           )
           if (response.status === 201) {
-            console.log('Success')
+            logger.log('Success')
           }
         }
       })

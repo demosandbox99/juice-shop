@@ -74,7 +74,7 @@ export class FaucetComponent implements OnInit {
     this.keysService.nftMintListen().subscribe({
       next:
       (response) => {
-        console.log(response)
+        logger.log(response)
       },
       error: (error) => {
         console.error(error)
@@ -117,7 +117,7 @@ export class FaucetComponent implements OnInit {
       )
       const userAddress = await signer.getAddress()
       const balanceBigNumber: BigNumber = await contract.balanceOf(userAddress)
-      console.log(balanceBigNumber)
+      logger.log(balanceBigNumber)
       this.myBEEBalance = balanceBigNumber
         .div(ethers.constants.WeiPerEther)
         .toNumber()
@@ -143,7 +143,7 @@ export class FaucetComponent implements OnInit {
         signer
       )
       const balance = await contract.balance()
-      console.log(balance)
+      logger.log(balance)
       this.BEEBalance = balance
     } catch (error) {
       console.error('Error fetching BEE balance:', error)
@@ -196,7 +196,7 @@ export class FaucetComponent implements OnInit {
         this.session = false
         this.snackBarHelperService.open('PLEASE_CONNECT_TO_SEPOLIA_NETWORK', 'errorBar')
       } else {
-        console.log('Should show ethereum chain now')
+        logger.log('Should show ethereum chain now')
         this.session = true
         await this.fetchBeeBalance()
         await this.fetchMyBeeBalance()
@@ -204,7 +204,7 @@ export class FaucetComponent implements OnInit {
       console.log('session', this.session)
       this.changeDetectorRef.detectChanges()
     } catch (err) {
-      console.log(err)
+      logger.log(err)
     }
   }
 
@@ -235,7 +235,7 @@ export class FaucetComponent implements OnInit {
       const tx = await contract.withdraw(amount)
       await tx.wait()
 
-      console.log('BEE tokens extracted successfully')
+      logger.log('BEE tokens extracted successfully')
       this.fetchBeeBalance()
       this.fetchMyBeeBalance()
     } catch (error) {
@@ -274,13 +274,13 @@ export class FaucetComponent implements OnInit {
       const contract = new ethers.Contract(nftAddress, nftABI, signer)
 
       const transaction = await contract.mintNFT()
-      console.log(transaction)
+      logger.log(transaction)
       this.translateService.get('NFT_MINT_TEXT_IN_PROGRESS').subscribe((translatedString: string) => {
         this.nftMintText = translatedString
       })
 
       const mintConfirmation = await transaction.wait()
-      console.log(mintConfirmation)
+      logger.log(mintConfirmation)
       if (mintConfirmation) {
         this.translateService.get('NFT_MINT_TEXT_SUCCESS').subscribe((translatedString: string) => {
           this.nftMintText = translatedString
@@ -303,7 +303,7 @@ export class FaucetComponent implements OnInit {
         }, 3500)
       }
 
-      console.log('NFT minted successfully!')
+      logger.log('NFT minted successfully!')
     } catch (error) {
       console.error('Error minting NFT:', error)
     }

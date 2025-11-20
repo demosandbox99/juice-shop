@@ -25,7 +25,7 @@ export class LastLoginIpComponent implements OnInit {
     try {
       this.parseAuthToken()
     } catch (err) {
-      console.log(err)
+      logger.log(err)
     }
   }
 

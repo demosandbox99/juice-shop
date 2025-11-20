@@ -74,7 +74,7 @@ export class DeluxeUserComponent implements OnInit {
           })
         }
       },
-      error: (err) => { console.log(err) }
+      error: (err) => { logger.log(err) }
     })
     this.userService.deluxeStatus().subscribe({
       next: (res) => {

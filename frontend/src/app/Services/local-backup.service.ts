@@ -44,7 +44,7 @@ export class LocalBackupService {
         saveAs(blob, `${fileName}-${new Date().toISOString().split('T')[0]}.json`)
       },
       error: () => {
-        console.log('Failed to retrieve continue code(s) for backup from server. Using cookie values as fallback.')
+        logger.log('Failed to retrieve continue code(s) for backup from server. Using cookie values as fallback.')
         backup.continueCode = this.cookieService.get('continueCode') ? this.cookieService.get('continueCode') : undefined
         backup.continueCodeFindIt = this.cookieService.get('continueCodeFindIt') ? this.cookieService.get('continueCodeFindIt') : undefined
         backup.continueCodeFixIt = this.cookieService.get('continueCodeFixIt') ? this.cookieService.get('continueCodeFixIt') : undefined
@@ -78,7 +78,7 @@ export class LocalBackupService {
             next: () => {
               location.reload()
             },
-            error: (err) => { console.log(err) }
+            error: (err) => { logger.log(err) }
           })
         })
       } else {

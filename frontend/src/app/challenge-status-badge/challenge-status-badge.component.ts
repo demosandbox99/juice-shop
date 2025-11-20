@@ -38,7 +38,7 @@ export class ChallengeStatusBadgeComponent {
         next: () => {
           this.windowRefService.nativeWindow.scrollTo(0, 0)
         },
-        error: (err) => { console.log(err) }
+        error: (err) => { logger.log(err) }
       })
     }
   }
