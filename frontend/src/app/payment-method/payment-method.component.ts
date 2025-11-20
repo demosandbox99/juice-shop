@@ -70,7 +70,7 @@ export class PaymentMethodComponent implements OnInit {
         this.storedCards = cards
         this.dataSource = new MatTableDataSource<Element>(this.storedCards)
       },
-      error: (err) => { console.log(err) }
+      error: (err) => { logger.log(err) }
     })
   }
 
@@ -105,7 +105,7 @@ export class PaymentMethodComponent implements OnInit {
       next: () => {
         this.load()
       },
-      error: (err) => { console.log(err) }
+      error: (err) => { logger.log(err) }
     })
   }
 

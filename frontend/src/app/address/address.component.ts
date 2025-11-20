@@ -64,7 +64,7 @@ export class AddressComponent implements OnInit {
       },
       error: (err) => {
         this.snackBarHelperService.open(err.error?.error, 'errorBar')
-        console.log(err)
+        logger.log(err)
       }
     })
   }
@@ -100,7 +100,7 @@ export class AddressComponent implements OnInit {
       },
       error: (err) => {
         this.snackBarHelperService.open(err.error?.error, 'errorBar')
-        console.log(err)
+        logger.log(err)
       }
     })
   }

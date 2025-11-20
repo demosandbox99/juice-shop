@@ -37,7 +37,7 @@ export class PrivacyPolicyComponent implements OnInit {
           this.privacyContactEmail = `donotreply@${this._document.location.hostname}`
         }
       },
-      error: (err) => { console.log(err) }
+      error: (err) => { logger.log(err) }
     })
   }
 }

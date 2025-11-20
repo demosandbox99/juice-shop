@@ -34,7 +34,7 @@ export class TokenSaleComponent implements OnInit {
           this.altcoinName = config.application.altcoinName
         }
       },
-      error: (err) => { console.log(err) }
+      error: (err) => { logger.log(err) }
     })
   }
 }

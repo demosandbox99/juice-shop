@@ -129,7 +129,7 @@ describe('/rest/products/search', () => {
                     }
                   )
                   if (response.status === 201) {
-                    console.log('Success')
+                    logger.log('Success')
                   }
                 })
               }

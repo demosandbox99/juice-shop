@@ -103,7 +103,7 @@ contract HelloWorld {
       const output = await solidityCompiler(compilerInput)
       if (output.errors && output.errors.length > 0 && !output.contracts) {
         this.compiledContracts = null
-        console.log(output.errors)
+        logger.log(output.errors)
         this.compilerErrors.push(...output.errors)
       } else {
         this.compilerErrors = []
@@ -168,7 +168,7 @@ contract HelloWorld {
           }
         })
 
-      console.log(this.contractFunctions)
+      logger.log(this.contractFunctions)
     } catch (error) {
       console.error('Error deploying contract:', error)
     }
@@ -221,13 +221,13 @@ contract HelloWorld {
         ...inputs,
         transactionOptions
       )
-      console.log(transaction)
+      logger.log(transaction)
 
       if (
         func.outputs.length > 0 &&
         (func.stateMutability === 'view' || func.stateMutability === 'pure')
       ) {
-        console.log('hello')
+        logger.log('hello')
         const outputValue = transaction[0].toString()
         const updatedFunc = this.contractFunctions.find(
           (f) => f.name === func.name
@@ -239,7 +239,7 @@ contract HelloWorld {
             this.contractFunctions[index] = updatedFunc
           }
         }
-        console.log(func.outputValue)
+        logger.log(func.outputValue)
       }
       console.log('Invoked:', transaction)
     } catch (error) {
@@ -303,7 +303,7 @@ contract HelloWorld {
         this.session = false
         this.snackBarHelperService.open('PLEASE_CONNECT_TO_SEPOLIA_NETWORK', 'errorBar')
       } else {
-        console.log('Should show ethereum chain now')
+        logger.log('Should show ethereum chain now')
         this.session = true
       }
       console.log('session', this.session)

@@ -59,7 +59,7 @@ export class ProductDetailsComponent implements OnInit, OnDestroy {
           this.author = 'Anonymous'
         }
       },
-      error: (err) => { console.log(err) }
+      error: (err) => { logger.log(err) }
     })
   }
 
@@ -77,7 +77,7 @@ export class ProductDetailsComponent implements OnInit, OnDestroy {
       next: () => {
         this.reviews$ = this.productReviewService.get(this.data.productData.id)
       },
-      error: (err) => { console.log(err) }
+      error: (err) => { logger.log(err) }
     })
     this.snackBarHelperService.open('CONFIRM_REVIEW_SAVED')
   }
@@ -94,7 +94,7 @@ export class ProductDetailsComponent implements OnInit, OnDestroy {
 
   likeReview (review: Review) {
     this.productReviewService.like(review._id).subscribe(() => {
-      console.log('Liked ' + review._id)
+      logger.log('Liked ' + review._id)
     })
     setTimeout(() => (this.reviews$ = this.productReviewService.get(this.data.productData.id)), 200)
   }
