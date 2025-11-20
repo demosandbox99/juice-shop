@@ -82,11 +82,11 @@ export class LoginComponent implements OnInit {
             this.redirectUri = authorizedRedirect.proxy ? authorizedRedirect.proxy : authorizedRedirect.uri
           } else {
             this.oauthUnavailable = true
-            console.log(this.redirectUri + ' is not an authorized redirect URI for this application.')
+            logger.log(this.redirectUri + ' is not an authorized redirect URI for this application.')
           }
         }
       },
-      error: (err) => { console.log(err) }
+      error: (err) => { logger.log(err) }
     })
 
     this.formSubmitService.attachEnterKeyHandler('login-form', 'loginButton', () => { this.login() })

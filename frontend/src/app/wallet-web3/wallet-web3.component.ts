@@ -166,7 +166,7 @@ export class WalletWeb3Component implements OnInit {
       }
       this.changeDetectorRef.detectChanges()
     } catch (err) {
-      console.log(err)
+      logger.log(err)
     }
   }
 }

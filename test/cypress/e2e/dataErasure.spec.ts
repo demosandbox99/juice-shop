@@ -19,7 +19,7 @@ describe('/dataerasure', () => {
           body: params
         })
         if (response.status === 200) {
-          console.log('Success')
+          logger.log('Success')
         }
       })
       cy.visit('/')

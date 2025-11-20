@@ -76,7 +76,7 @@ export class CodeSnippetComponent implements OnInit {
       next: (config) => {
         this.showFeedbackButtons = config.challenges.showFeedbackButtons
       },
-      error: (err) => { console.log(err) }
+      error: (err) => { logger.log(err) }
     })
 
     this.codeSnippetService.get(this.dialogData.key).subscribe({
@@ -189,7 +189,7 @@ export class CodeSnippetComponent implements OnInit {
             expires.setFullYear(expires.getFullYear() + 1)
             this.cookieService.put('continueCodeFindIt', continueCode, { expires })
           },
-          error: (err) => { console.log(err) }
+          error: (err) => { logger.log(err) }
         })
       } else {
         this.solved.fixIt = true
@@ -202,7 +202,7 @@ export class CodeSnippetComponent implements OnInit {
             expires.setFullYear(expires.getFullYear() + 1)
             this.cookieService.put('continueCodeFixIt', continueCode, { expires })
           },
-          error: (err) => { console.log(err) }
+          error: (err) => { logger.log(err) }
         })
       }
       this.result = ResultState.Right

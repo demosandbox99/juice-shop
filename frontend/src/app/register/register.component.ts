@@ -63,7 +63,7 @@ export class RegisterComponent implements OnInit {
       next: (securityQuestions: any) => {
         this.securityQuestions = securityQuestions
       },
-      error: (err) => { console.log(err) }
+      error: (err) => { logger.log(err) }
     })
 
     this.formSubmitService.attachEnterKeyHandler('registration-form', 'registerButton', () => { this.save() })
@@ -90,7 +90,7 @@ export class RegisterComponent implements OnInit {
         })
       },
       error: (err) => {
-        console.log(err)
+        logger.log(err)
         if (err.error?.errors) {
           const error = err.error.errors[0]
           if (error.message) {

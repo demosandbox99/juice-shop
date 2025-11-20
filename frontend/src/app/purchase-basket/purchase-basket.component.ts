@@ -51,7 +51,7 @@ export class PurchaseBasketComponent implements OnInit {
         this.userEmail = data.email || 'anonymous'
         this.userEmail = '(' + this.userEmail + ')'
       },
-      error: (err) => { console.log(err) }
+      error: (err) => { logger.log(err) }
     })
   }
 
@@ -70,7 +70,7 @@ export class PurchaseBasketComponent implements OnInit {
         this.bonus = basket.Products.reduce((bonusPoints, product) => bonusPoints + Math.round(product.price / 10) * product.BasketItem.quantity, 0)
         this.sendToParent(this.dataSource.length)
       },
-      error: (err) => { console.log(err) }
+      error: (err) => { logger.log(err) }
     })
   }
 
@@ -80,7 +80,7 @@ export class PurchaseBasketComponent implements OnInit {
         this.load()
         this.basketService.updateNumberOfCartItems()
       },
-      error: (err) => { console.log(err) }
+      error: (err) => { logger.log(err) }
     })
   }
 
@@ -104,11 +104,11 @@ export class PurchaseBasketComponent implements OnInit {
           },
           error: (err) => {
             this.snackBarHelperService.open(err.error?.error, 'errorBar')
-            console.log(err)
+            logger.log(err)
           }
         })
       },
-      error: (err) => { console.log(err) }
+      error: (err) => { logger.log(err) }
     })
   }
 

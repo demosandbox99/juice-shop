@@ -100,7 +100,7 @@ export class PaymentComponent implements OnInit {
         this.walletBalance = balance
         this.walletBalanceStr = parseFloat(balance).toFixed(2)
       },
-      error: (err) => { console.log(err) }
+      error: (err) => { logger.log(err) }
     })
     this.couponPanelExpanded = localStorage.getItem('couponPanelExpanded') ? JSON.parse(localStorage.getItem('couponPanelExpanded')) : false
     this.paymentPanelExpanded = localStorage.getItem('paymentPanelExpanded') ? JSON.parse(localStorage.getItem('paymentPanelExpanded')) : false
@@ -119,7 +119,7 @@ export class PaymentComponent implements OnInit {
           }
         }
       },
-      error: (err) => { console.log(err) }
+      error: (err) => { logger.log(err) }
     })
   }
 
@@ -134,7 +134,7 @@ export class PaymentComponent implements OnInit {
             next: (res) => {
               this.totalPrice = res.membershipCost
             },
-            error: (err) => { console.log(err) }
+            error: (err) => { logger.log(err) }
           })
         } else {
           const itemTotal = parseFloat(sessionStorage.getItem('itemTotal'))
@@ -145,7 +145,7 @@ export class PaymentComponent implements OnInit {
           })
         }
       },
-      error: (err) => { console.log(err) }
+      error: (err) => { logger.log(err) }
     })
   }
 
@@ -222,7 +222,7 @@ export class PaymentComponent implements OnInit {
           this.snackBarHelperService.open('CHARGED_WALLET', 'confirmBar')
         },
         error: (err) => {
-          console.log(err)
+          logger.log(err)
           this.snackBarHelperService.open(err.error?.message, 'errorBar')
         }
       })
@@ -233,7 +233,7 @@ export class PaymentComponent implements OnInit {
           this.cookieService.put('token', data.token)
           this.ngZone.run(async () => await this.router.navigate(['/deluxe-membership']))
         },
-        error: (err) => { console.log(err) }
+        error: (err) => { logger.log(err) }
       })
     } else {
       if (this.paymentMode === 'wallet') {
