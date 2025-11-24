@@ -32,7 +32,7 @@ finale.initialize({ app, sequelize })
     if (name === 'User') {
       resource.create.send.before((req: Request, res: Response, context: { instance: { id: any }, continue: any }) => {
         WalletModel.create({ UserId: context.instance.id }).catch((err: unknown) => {
-          console.log(err)
+          logger.log(err)
         })
         context.instance.role = 'customer'
         return context.continue
