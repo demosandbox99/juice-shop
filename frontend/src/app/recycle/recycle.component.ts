@@ -62,7 +62,7 @@ export class RecycleComponent implements OnInit {
           this.bottomImage = `assets/public/images/products/${config.application.recyclePage.bottomProductImage}`
         }
       },
-      error: (err) => { console.log(err) }
+      error: (err) => { logger.log(err) }
     })
 
     this.initRecycle()
@@ -79,7 +79,7 @@ export class RecycleComponent implements OnInit {
         this.userEmail = data.email
         this.requestorControl.setValue(this.userEmail)
       },
-      error: (err) => { console.log(err) }
+      error: (err) => { logger.log(err) }
     })
   }
 
@@ -118,7 +118,7 @@ export class RecycleComponent implements OnInit {
       },
       error: (err) => {
         this.snackBarHelperService.open(err.error?.error, 'errorBar')
-        console.log(err)
+        logger.log(err)
       }
     })
   }
@@ -129,7 +129,7 @@ export class RecycleComponent implements OnInit {
         this.recycles = recycles
       },
       error: (error) => {
-        console.log(error)
+        logger.log(error)
       }
     })
   }

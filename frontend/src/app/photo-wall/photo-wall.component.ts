@@ -46,7 +46,7 @@ export class PhotoWallComponent implements OnInit {
   ngOnInit (): void {
     this.slideshowDataSource = []
     this.photoWallService.get().pipe(catchError(err => {
-      console.log(err)
+      logger.log(err)
 
       return EMPTY
     })).subscribe((memories) => {
@@ -65,7 +65,7 @@ export class PhotoWallComponent implements OnInit {
     })
 
     this.configurationService.getApplicationConfiguration().pipe(catchError(err => {
-      console.log(err)
+      logger.log(err)
 
       return EMPTY
     })).subscribe((config) => {
@@ -97,7 +97,7 @@ export class PhotoWallComponent implements OnInit {
       },
       error: (err) => {
         this.snackBarHelperService.open(err.error?.error, 'errorBar')
-        console.log(err)
+        logger.log(err)
       }
     })
   }

@@ -90,7 +90,7 @@ export class ChallengeSolvedNotificationComponent implements OnInit {
               next: (countryMap: any) => {
                 this.countryMap = countryMap
               },
-              error: (err) => { console.log(err) }
+              error: (err) => { logger.log(err) }
             })
           }
         } else {
@@ -140,7 +140,7 @@ export class ChallengeSolvedNotificationComponent implements OnInit {
         expires.setFullYear(expires.getFullYear() + 1)
         this.cookieService.put('continueCode', continueCode, { expires })
       },
-      error: (err) => { console.log(err) }
+      error: (err) => { logger.log(err) }
     })
   }
 }

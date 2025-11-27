@@ -116,7 +116,7 @@ export class ChangePasswordComponent implements OnInit {
           this.resetForm()
         },
         error: (error) => {
-          console.log(error)
+          logger.log(error)
           this.error = error
           this.confirmation = undefined
           this.resetPasswords()

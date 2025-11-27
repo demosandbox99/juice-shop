@@ -198,7 +198,7 @@ export class ScoreBoardComponent implements OnInit, OnDestroy {
       next: () => {
         this.ngOnInit()
       },
-      error: (err) => { console.log(err) }
+      error: (err) => { logger.log(err) }
     })
   }
 }

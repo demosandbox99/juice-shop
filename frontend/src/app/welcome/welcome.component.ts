@@ -39,7 +39,7 @@ export class WelcomeComponent implements OnInit {
             }
           })
         },
-        error: (err) => { console.log(err) }
+        error: (err) => { logger.log(err) }
       })
     }
   }

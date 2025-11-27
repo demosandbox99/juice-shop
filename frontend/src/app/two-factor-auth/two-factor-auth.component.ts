@@ -80,7 +80,7 @@ export class TwoFactorAuthComponent implements OnInit {
         }
       },
       error: () => {
-        console.log('Failed to fetch 2fa status')
+        logger.log('Failed to fetch 2fa status')
       }
     })
     return status

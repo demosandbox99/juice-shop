@@ -77,7 +77,7 @@ export class ComplaintComponent implements OnInit {
       },
       error: (err) => {
         this.complaint = undefined
-        console.log(err)
+        logger.log(err)
       }
     })
   }

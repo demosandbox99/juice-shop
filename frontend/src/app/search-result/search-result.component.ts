@@ -136,7 +136,7 @@ export class SearchResultComponent implements OnDestroy, AfterViewInit {
         }
         this.cdRef.detectChanges()
       },
-      error: (err) => { console.log(err) }
+      error: (err) => { logger.log(err) }
     })
   }
 
@@ -185,7 +185,7 @@ export class SearchResultComponent implements OnDestroy, AfterViewInit {
   // vuln-code-snippet end localXssChallenge xssBonusChallenge
 
   startHackingInstructor (challengeName: string) {
-    console.log(`Starting instructions for challenge "${challengeName}"`)
+    logger.log(`Starting instructions for challenge "${challengeName}"`)
     import(/* webpackChunkName: "tutorial" */ '../../hacking-instructor').then(module => {
       module.startHackingInstructorFor(challengeName)
     })
@@ -228,16 +228,16 @@ export class SearchResultComponent implements OnDestroy, AfterViewInit {
                           }
                         })
                       },
-                      error: (err) => { console.log(err) }
+                      error: (err) => { logger.log(err) }
                     })
                   },
                   error: (err) => {
                     this.snackBarHelperService.open(err.error?.error, 'errorBar')
-                    console.log(err)
+                    logger.log(err)
                   }
                 })
               },
-              error: (err) => { console.log(err) }
+              error: (err) => { logger.log(err) }
             })
             break
           }
@@ -258,17 +258,17 @@ export class SearchResultComponent implements OnDestroy, AfterViewInit {
                     }
                   })
                 },
-                error: (err) => { console.log(err) }
+                error: (err) => { logger.log(err) }
               })
             },
             error: (err) => {
               this.snackBarHelperService.open(err.error?.error, 'errorBar')
-              console.log(err)
+              logger.log(err)
             }
           })
         }
       },
-      error: (err) => { console.log(err) }
+      error: (err) => { logger.log(err) }
     })
   }
 
