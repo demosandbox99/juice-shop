@@ -1,3 +1,5 @@
+import crypto from 'crypto';
+
 import {BasketModel} from "../../../models/basket";
 
 export function login () {
@@ -18,7 +20,7 @@ export function login () {
       { bind: [ req.body.email, security.hash(req.body.password) ], model: models.User, plain: true })
       .then((authenticatedUser) => {
         const user = utils.queryResultToJson(authenticatedUser)
-        if (user.data?.id && user.data.totpSecret !== '') {
+        if (user.data?.id && !crypto.timingSafeEqual(Buffer.from(user.data.totpSecret), Buffer.from(''))) {
           res.status(401).json({
             status: 'totp_token_required',
             data: {
