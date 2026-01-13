@@ -107,7 +107,7 @@ describe('/rest/products/reviews', () => {
             }
           )
           if (response.status === 200) {
-            console.log('Success')
+            logger.log('Success')
           }
         }
       })
@@ -136,7 +136,7 @@ describe('/rest/products/reviews', () => {
             }
           )
           if (anotherResponse.status === 200) {
-            console.log('Success')
+            logger.log('Success')
           }
         }
 

@@ -32,7 +32,7 @@ describe('/#/register', () => {
               }
             )
             if (response.status === 201) {
-              console.log('Success')
+              logger.log('Success')
             }
           })
 
@@ -63,7 +63,7 @@ describe('/#/register', () => {
           })
         })
         if (response.status === 201) {
-          console.log('Success')
+          logger.log('Success')
         }
       })
       cy.expectChallengeSolved({ challenge: 'Admin Registration' })
@@ -85,7 +85,7 @@ describe('/#/register', () => {
           })
         })
         if (response.status === 201) {
-          console.log('Success')
+          logger.log('Success')
         }
       })
       cy.expectChallengeSolved({ challenge: 'Repetitive Registration' })
@@ -108,7 +108,7 @@ describe('/#/register', () => {
           })
         })
         if (response.status === 201) {
-          console.log('Success')
+          logger.log('Success')
         }
       })
       cy.expectChallengeSolved({ challenge: 'Empty User Registration' })

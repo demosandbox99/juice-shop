@@ -20,7 +20,7 @@ describe('/#/basket', () => {
             }
           )
           if (response.status === 200) {
-            console.log('Success')
+            logger.log('Success')
           }
         })
         cy.visit('/#/order-summary')
@@ -126,7 +126,7 @@ describe('/#/basket', () => {
             }
           )
           if (response.status === 201) {
-            console.log('Success')
+            logger.log('Success')
           }
         })
       })

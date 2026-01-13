@@ -49,7 +49,7 @@ export class ProductReviewEditComponent implements OnInit {
         this.dialogRef.close()
       },
       error: (err) => {
-        console.log(err)
+        logger.log(err)
         this.error = err
       }
     })

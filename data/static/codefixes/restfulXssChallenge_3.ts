@@ -39,7 +39,7 @@ ngAfterViewInit () {
         })
         this.cdRef.detectChanges()
       },
-      error: (err) => { console.log(err) }
+      error: (err) => { logger.log(err) }
     })
   }
 

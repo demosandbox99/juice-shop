@@ -72,7 +72,7 @@ export class AccountingComponent implements AfterViewInit, OnDestroy {
           }
         })
       },
-      error: (err) => { console.log(err) }
+      error: (err) => { logger.log(err) }
     })
   }
 
@@ -83,7 +83,7 @@ export class AccountingComponent implements AfterViewInit, OnDestroy {
         this.dataSource = new MatTableDataSource<Element>(this.tableData)
         this.dataSource.paginator = this.paginator
       },
-      error: (err) => { console.log(err) }
+      error: (err) => { logger.log(err) }
     })
   }
 
@@ -102,7 +102,7 @@ export class AccountingComponent implements AfterViewInit, OnDestroy {
         this.orderSource = new MatTableDataSource<Order>(this.orderData)
         this.orderSource.paginator = this.paginatorOrderHistory
       },
-      error: (err) => { console.log(err) }
+      error: (err) => { logger.log(err) }
     })
   }
 
@@ -127,7 +127,7 @@ export class AccountingComponent implements AfterViewInit, OnDestroy {
       },
       error: (err) => {
         this.snackBarHelperService.open(err.error, 'errorBar')
-        console.log(err)
+        logger.log(err)
       }
     })
   }
@@ -141,7 +141,7 @@ export class AccountingComponent implements AfterViewInit, OnDestroy {
       },
       error: (err) => {
         this.snackBarHelperService.open(err.error, 'errorBar')
-        console.log(err)
+        logger.log(err)
       }
     })
   }
@@ -153,7 +153,7 @@ export class AccountingComponent implements AfterViewInit, OnDestroy {
       },
       error: (err) => {
         this.snackBarHelperService.open(err, 'errorBar')
-        console.log(err)
+        logger.log(err)
       }
     })
   }

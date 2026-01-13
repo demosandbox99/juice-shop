@@ -122,7 +122,7 @@ export class NavbarComponent implements OnInit {
           this.version = `v${version}`
         }
       },
-      error: (err) => { console.log(err) }
+      error: (err) => { logger.log(err) }
     })
 
     this.configurationService.getApplicationConfiguration().subscribe({
@@ -143,7 +143,7 @@ export class NavbarComponent implements OnInit {
           this.logoSrc = 'assets/public/images/' + logo
         }
       },
-      error: (err) => { console.log(err) }
+      error: (err) => { logger.log(err) }
     })
 
     if (localStorage.getItem('token')) {
@@ -225,7 +225,7 @@ export class NavbarComponent implements OnInit {
       next: (user: any) => {
         this.userEmail = user.email
       },
-      error: (err) => { console.log(err) }
+      error: (err) => { logger.log(err) }
     })
   }
 
@@ -234,7 +234,7 @@ export class NavbarComponent implements OnInit {
   }
 
   logout () {
-    this.userService.saveLastLoginIp().subscribe({ next: () => { this.noop() }, error: (err) => { console.log(err) } })
+    this.userService.saveLastLoginIp().subscribe({ next: () => { this.noop() }, error: (err) => { logger.log(err) } })
     localStorage.removeItem('token')
     this.cookieService.remove('token')
     sessionStorage.removeItem('bid')
@@ -269,7 +269,7 @@ export class NavbarComponent implements OnInit {
           this.scoreBoardVisible = challenges[0].solved
         })
       },
-      error: (err) => { console.log(err) }
+      error: (err) => { logger.log(err) }
     })
   }
 

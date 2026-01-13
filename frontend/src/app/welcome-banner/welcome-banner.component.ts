@@ -45,13 +45,13 @@ export class WelcomeBannerComponent implements OnInit {
           this.showDismissBtn = false
         }
       },
-      error: (err) => { console.log(err) }
+      error: (err) => { logger.log(err) }
     })
   }
 
   startHackingInstructor () {
     this.closeWelcome()
-    console.log('Starting instructions for challenge "Score Board"')
+    logger.log('Starting instructions for challenge "Score Board"')
     import(/* webpackChunkName: "tutorial" */ '../../hacking-instructor').then(module => {
       module.startHackingInstructorFor('Score Board')
     })

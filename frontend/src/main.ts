@@ -149,4 +149,4 @@ bootstrapApplication(AppComponent, {
         provideAnimations()
     ]
 })
-  .catch((err: Error) => console.log(err))
+  .catch((err: Error) => logger.log(err))
