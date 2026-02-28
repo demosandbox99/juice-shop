@@ -48,7 +48,7 @@ export class OrderSummaryComponent implements OnInit {
       next: (address) => {
         this.address = address
       },
-      error: (error) => { console.log(error) }
+      error: (error) => { logger.log(error) }
     })
 
     if (sessionStorage.getItem('paymentId') !== 'wallet') {
@@ -57,7 +57,7 @@ export class OrderSummaryComponent implements OnInit {
           card.cardNum = String(card.cardNum).substring(String(card.cardNum).length - 4)
           this.paymentMethod = card
         },
-        error: (err) => { console.log(err) }
+        error: (err) => { logger.log(err) }
       })
     } else if (sessionStorage.getItem('paymentId') === 'wallet') {
       this.paymentMethod = 'wallet'
@@ -87,7 +87,7 @@ export class OrderSummaryComponent implements OnInit {
         this.ngZone.run(async () => await this.router.navigate(['/order-completion', orderConfirmationId]))
       },
       error: (err) => {
-        console.log(err)
+        logger.log(err)
         this.snackBarHelperService.open(err.error?.error.message, 'errorBar')
       }
     })

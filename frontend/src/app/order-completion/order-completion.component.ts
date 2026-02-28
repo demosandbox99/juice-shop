@@ -77,19 +77,19 @@ export class OrderCompletionComponent implements OnInit {
                   }
                 }
               },
-              error: (err) => { console.log(err) }
+              error: (err) => { logger.log(err) }
             })
             this.addressService.getById(this.orderDetails.addressId).subscribe({
               next: (address) => {
                 this.address = address
               },
-              error: (error) => { console.log(error) }
+              error: (error) => { logger.log(error) }
             })
           },
-          error: (err) => { console.log(err) }
+          error: (err) => { logger.log(err) }
         })
       },
-      error: (err) => { console.log(err) }
+      error: (err) => { logger.log(err) }
     })
   }
 

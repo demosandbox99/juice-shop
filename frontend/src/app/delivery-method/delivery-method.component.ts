@@ -49,16 +49,16 @@ export class DeliveryMethodComponent implements OnInit {
       next: (address) => {
         this.address = address
       },
-      error: (error) => { console.log(error) }
+      error: (error) => { logger.log(error) }
     })
 
     this.deliverySerivce.get().subscribe({
       next: (methods) => {
-        console.log(methods)
+        logger.log(methods)
         this.methods = methods
         this.dataSource = new MatTableDataSource<DeliveryMethod>(this.methods)
       },
-      error: (error) => { console.log(error) }
+      error: (error) => { logger.log(error) }
     })
   }
 

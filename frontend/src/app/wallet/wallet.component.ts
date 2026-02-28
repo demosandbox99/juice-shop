@@ -35,7 +35,7 @@ export class WalletComponent implements OnInit {
         this.balance = parseFloat(balance).toFixed(2)
       },
       error: (err) => {
-        console.log(err)
+        logger.log(err)
       }
     })
   }
